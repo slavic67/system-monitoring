@@ -1,13 +1,18 @@
 global:
-  scrape_interval: 3s
+  scrape_interval: 300s
 
 scrape_configs:
   - job_name: 'backend'
+    scheme: https
     metrics_path: /actuator/prometheus
+    tls_config:
+      insecure_skip_verify: true 
+    basic_auth:
+      username: ''  # Логин
+      password: ''  # Пароль
     static_configs:
-      - targets: ['backend:8080']
+      - targets: ['host.docker.internal:8080'] # ip
     relabel_configs:
       - source_labels: ['__address__']
         target_label: 'application'
-        replacement: 'backend'
-
+        replacement: 'backend' # label приложения
